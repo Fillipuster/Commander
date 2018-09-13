@@ -6,6 +6,40 @@ import java.io.InputStreamReader;
 
 public class CMD {
 	
+	public static String execEverything(String keyword) {
+		StringBuilder sb = new StringBuilder();
+		
+		ProcessBuilder builder = new ProcessBuilder("es.exe", keyword);
+		
+		builder.redirectErrorStream(true);
+		
+		Process p;
+		try {
+			p = builder.start();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return "Java_Exception: " + e.getMessage();
+		}
+		
+		BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
+		String line;
+		while (true) {
+			try {
+				line = br.readLine();
+			} catch (IOException e) {
+				e.printStackTrace();
+				return "Java_Exception: " + e.getMessage();
+			}
+			
+			if (line == null) {break;}
+			
+			sb.append(line);
+			sb.append("\n");
+		}
+		
+		return sb.toString();
+	}
+	
 	public static String execSingle(String cmd) {
 		return exec(cmd);
 	}
